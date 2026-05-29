@@ -6,6 +6,8 @@ Updates itself every weekday after US market close with zero human interaction.
 
 **Educational only — not financial advice.**
 
+**Live site:** https://vijaysai1102.github.io/silver-predictor/
+
 ---
 
 ## Architecture
