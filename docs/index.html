@@ -4,366 +4,395 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Silver Price Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    body { font-family: 'Inter', sans-serif; }
-    .agent-card { transition: all 0.2s; }
-    .signal-bar-track { background: #e5e7eb; border-radius: 9999px; height: 8px; }
-    .signal-bar-fill  { border-radius: 9999px; height: 8px; }
-    .up   { color: #16a34a; }
-    .down { color: #dc2626; }
-    .bg-up   { background-color: #dcfce7; }
-    .bg-down { background-color: #fee2e2; }
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #06090f; }
+
+    .card { background: #0d1424; border: 1px solid #1b2540; border-radius: 16px; }
+    .card-glow-up   { border-color: rgba(16,185,129,0.35); box-shadow: 0 0 40px rgba(16,185,129,0.05); }
+    .card-glow-down { border-color: rgba(239, 68, 68,0.35); box-shadow: 0 0 40px rgba(239,68,68,0.05); }
+
+    .up   { color: #10b981; }
+    .down { color: #ef4444; }
+    .badge-up   { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+    .badge-down { background: rgba(239,68,68,0.12);  color: #ef4444;  border: 1px solid rgba(239,68,68,0.3); }
+
+    .price-big { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+
+    .tag { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #3d5070; }
+
+    .signal-track { background: #141e30; border-radius: 9999px; height: 5px; }
+    .signal-fill  { border-radius: 9999px; height: 5px; transition: width 0.5s ease; }
+
+    .agent-card { background: #0d1424; border: 1px solid #1b2540; border-radius: 12px; transition: border-color 0.2s; }
+    .agent-card:hover { border-color: #2a3a58; }
+    .agent-card.up-border   { border-color: rgba(16,185,129,0.25); }
+    .agent-card.down-border { border-color: rgba(239,68,68,0.25); }
+
+    .stat-card { background: #0d1424; border: 1px solid #1b2540; border-radius: 12px; }
+    .stat-card.green { border-color: rgba(16,185,129,0.2); }
+    .stat-card.red   { border-color: rgba(239,68,68,0.2); }
+
+    .divider { border-color: #1b2540; }
+
+    .silver-gradient {
+      background: linear-gradient(90deg, #64748b, #cbd5e1, #94a3b8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #06090f; }
+    ::-webkit-scrollbar-thumb { background: #1b2540; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen">
+<body class="text-slate-100 min-h-screen">
 
-<!-- ═══════════════════════ HEADER ═══════════════════════════════════════════ -->
-<header class="bg-gray-900 text-white py-4 px-6 flex items-center justify-between">
-  <div>
-    <h1 class="text-xl font-bold tracking-tight">Silver Price Predictor</h1>
-    <p class="text-gray-400 text-xs mt-0.5">XAG/USD · Daily next-close estimate</p>
+<!-- ══ HEADER ════════════════════════════════════════════════════════════════ -->
+<header style="background:#09101d;border-bottom:1px solid #1b2540" class="px-6 py-4">
+  <div class="max-w-6xl mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div style="background:linear-gradient(135deg,#475569,#94a3b8)"
+           class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-sm tracking-tight">Ag</div>
+      <div>
+        <h1 class="text-base font-bold tracking-tight silver-gradient">Silver Price Predictor</h1>
+        <p class="text-slate-600 text-xs mt-0.5">XAG/USD · SI=F · SLV · Daily next-close model</p>
+      </div>
+    </div>
+    <div id="last-updated" class="text-slate-600 text-xs text-right"></div>
   </div>
-  <div id="last-updated" class="text-right text-xs text-gray-400"></div>
 </header>
 
-<!-- ═══════════════════════ DISCLAIMER ══════════════════════════════════════ -->
-<div class="bg-amber-50 border-b border-amber-200 px-6 py-2 text-xs text-amber-800">
-  <strong>Educational only — not financial advice.</strong>
-  Silver is highly volatile. Predictions can and do fail. Past accuracy does not guarantee future results.
+<!-- ══ DISCLAIMER ════════════════════════════════════════════════════════════ -->
+<div style="background:rgba(120,80,10,0.15);border-bottom:1px solid rgba(120,80,10,0.2)" class="px-6 py-2 text-center">
+  <p class="text-amber-600/80 text-xs">Educational only — not financial advice. Silver is highly volatile. Predictions can and do fail.</p>
 </div>
 
-<main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+<main class="max-w-6xl mx-auto px-4 py-6 space-y-4">
 
-  <!-- ═══════════ HEADLINE CARDS ════════════════════════════════════════════ -->
+  <!-- ══ PREDICTION CARDS ═══════════════════════════════════════════════════ -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-  <!-- SI=F card -->
-  <section id="headline-card" class="bg-white rounded-2xl shadow p-6">
-    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">SI=F · COMEX Silver Futures</p>
-    <div class="flex items-start justify-between gap-4 flex-wrap">
-      <div>
-        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Next trading day prediction</p>
-        <div class="flex items-end gap-3 mt-1">
-          <span id="pred-close" class="text-5xl font-bold">—</span>
-          <span id="pred-dir-badge" class="text-lg font-semibold px-3 py-1 rounded-full">—</span>
+    <!-- SI=F -->
+    <div id="sif-card" class="card p-6">
+      <div class="flex items-start justify-between mb-5">
+        <div>
+          <p class="tag">COMEX Silver Futures</p>
+          <p class="text-white font-bold text-lg mt-0.5">SI=F</p>
         </div>
-        <p id="ci-text" class="text-sm text-gray-500 mt-2">80% confidence band: loading…</p>
-        <p id="one-liner" class="text-gray-700 mt-3 italic">—</p>
+        <span id="pred-dir-badge" class="text-xs font-bold px-3 py-1.5 rounded-full">—</span>
       </div>
-      <div class="text-right min-w-[130px]">
-        <p class="text-xs text-gray-400 uppercase tracking-wide">Direction probability</p>
-        <p id="dir-prob" class="text-4xl font-bold mt-1">—</p>
-        <div id="api-health" class="mt-3 text-xs px-2 py-1 rounded-full inline-block bg-gray-100 text-gray-500">
-          loading…
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p class="tag mb-2">Predicted Close</p>
+          <span id="pred-close" class="price-big">—</span>
+        </div>
+        <div class="text-right">
+          <p class="tag mb-2">Confidence</p>
+          <span id="dir-prob" class="text-3xl font-bold">—</span>
         </div>
       </div>
+      <p id="ci-text" class="text-slate-600 text-xs mt-3">80% band: loading…</p>
+      <hr class="divider my-4">
+      <p id="one-liner" class="text-slate-400 text-sm leading-relaxed italic min-h-[2.5rem]">—</p>
+      <div id="api-health" class="mt-4 inline-block text-xs px-2.5 py-1 rounded-full bg-slate-800/60 text-slate-500">loading…</div>
     </div>
-  </section>
 
-  <!-- SLV card -->
-  <section id="slv-card" class="bg-white rounded-2xl shadow p-6">
-    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">SLV · iShares Silver Trust ETF</p>
-    <div class="flex items-start justify-between gap-4 flex-wrap">
-      <div>
-        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Next trading day prediction</p>
-        <div class="flex items-end gap-3 mt-1">
-          <span id="slv-pred-close" class="text-5xl font-bold">—</span>
-          <span id="slv-dir-badge" class="text-lg font-semibold px-3 py-1 rounded-full">—</span>
+    <!-- SLV -->
+    <div id="slv-card" class="card p-6">
+      <div class="flex items-start justify-between mb-5">
+        <div>
+          <p class="tag">iShares Silver Trust ETF</p>
+          <p class="text-white font-bold text-lg mt-0.5">SLV</p>
         </div>
-        <p id="slv-ci-text" class="text-sm text-gray-500 mt-2">80% confidence band: loading…</p>
-        <p class="text-gray-500 mt-3 text-xs italic">Same directional signal as SI=F · calibrated for ETF price level</p>
+        <span id="slv-dir-badge" class="text-xs font-bold px-3 py-1.5 rounded-full">—</span>
       </div>
-      <div class="text-right min-w-[130px]">
-        <p class="text-xs text-gray-400 uppercase tracking-wide">Direction probability</p>
-        <p id="slv-dir-prob" class="text-4xl font-bold mt-1">—</p>
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p class="tag mb-2">Predicted Close</p>
+          <span id="slv-pred-close" class="price-big">—</span>
+        </div>
+        <div class="text-right">
+          <p class="tag mb-2">Confidence</p>
+          <span id="slv-dir-prob" class="text-3xl font-bold">—</span>
+        </div>
       </div>
+      <p id="slv-ci-text" class="text-slate-600 text-xs mt-3">80% band: loading…</p>
+      <hr class="divider my-4">
+      <p class="text-slate-600 text-xs leading-relaxed">Same directional signal as SI=F, calibrated to the ETF price level. SLV tracks physical silver held in trust.</p>
     </div>
-  </section>
 
   </div>
 
-  <!-- ═══════════ ACCURACY PANEL ══════════════════════════════════════════ -->
-  <section class="bg-white rounded-2xl shadow p-6">
-    <h2 class="text-base font-semibold mb-4">Live Accuracy (last 90 predictions)</h2>
-    <div id="accuracy-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-      <!-- filled by JS -->
+  <!-- ══ ACCURACY ══════════════════════════════════════════════════════════ -->
+  <div class="card p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-sm font-semibold text-slate-300">Model Accuracy</h2>
+      <span class="tag">live tracking</span>
     </div>
-    <div id="backtest-note" class="mt-4 text-xs text-gray-500"></div>
-  </section>
+    <div id="accuracy-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+    <p id="backtest-note" class="mt-3 text-xs text-slate-700 leading-relaxed"></p>
+  </div>
 
-  <!-- ═══════════ AGENT SIGNALS ════════════════════════════════════════════ -->
-  <section class="bg-white rounded-2xl shadow p-6">
-    <h2 class="text-base font-semibold mb-4">Agent Signals</h2>
-    <div id="agents-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-      <!-- filled by JS -->
+  <!-- ══ AGENT SIGNALS ══════════════════════════════════════════════════════ -->
+  <div class="card p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-sm font-semibold text-slate-300">Agent Signals</h2>
+      <span class="tag">5 specialists + quant</span>
     </div>
-  </section>
+    <div id="agents-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+  </div>
 
-  <!-- ═══════════ COMMENTARY ════════════════════════════════════════════════ -->
-  <section class="bg-white rounded-2xl shadow p-6">
-    <h2 class="text-base font-semibold mb-3">Daily Commentary</h2>
-    <p id="commentary-text" class="text-gray-700 text-sm leading-relaxed">Loading…</p>
-    <ul id="watch-list" class="mt-3 space-y-1"></ul>
-  </section>
+  <!-- ══ COMMENTARY ════════════════════════════════════════════════════════ -->
+  <div class="card p-5">
+    <h2 class="text-sm font-semibold text-slate-300 mb-3">Daily Commentary</h2>
+    <p id="commentary-text" class="text-slate-400 text-sm leading-relaxed">Loading…</p>
+    <ul id="watch-list" class="mt-3 space-y-1.5"></ul>
+  </div>
 
-  <!-- ═══════════ HISTORY CHART ════════════════════════════════════════════ -->
-  <section class="bg-white rounded-2xl shadow p-6">
-    <h2 class="text-base font-semibold mb-4">Predicted vs Actual Close</h2>
-    <div class="flex gap-4 mb-3">
-      <label class="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
-        <input type="checkbox" id="toggle-slv" checked class="accent-purple-500"> Show SLV
+  <!-- ══ HISTORY CHART ══════════════════════════════════════════════════════ -->
+  <div class="card p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-sm font-semibold text-slate-300">Predicted vs Actual Close</h2>
+      <label class="flex items-center gap-2 text-xs text-slate-500 cursor-pointer select-none">
+        <input type="checkbox" id="toggle-slv" checked class="accent-purple-500 w-3.5 h-3.5"> Show SLV
       </label>
     </div>
     <div class="relative h-72">
       <canvas id="history-chart"></canvas>
     </div>
-    <p class="text-xs text-gray-400 mt-2">Blue = SI=F predicted · Orange = SI=F actual · Purple = SLV predicted · Pink = SLV actual (where available).</p>
-  </section>
+    <p class="text-xs text-slate-700 mt-3">
+      <span style="color:#3b82f6">&#9644;</span> SI=F predicted &nbsp;
+      <span style="color:#f97316">&#9679;</span> SI=F actual &nbsp;
+      <span style="color:#8b5cf6">&#9644;</span> SLV predicted &nbsp;
+      <span style="color:#ec4899">&#9679;</span> SLV actual
+    </p>
+  </div>
 
 </main>
 
-<!-- ═══════════════════════ FOOTER ══════════════════════════════════════════ -->
-<footer class="text-center text-xs text-gray-400 py-6 border-t">
+<footer class="text-center text-xs text-slate-800 py-6 border-t border-slate-900/80">
   Silver Price Predictor · Educational use only · Not financial advice
 </footer>
 
 <script>
-/* ── Data loading ─────────────────────────────────────────────────────────── */
 async function loadData() {
   try {
     const r = await fetch('data/predictions.json?t=' + Date.now());
     if (!r.ok) throw new Error('HTTP ' + r.status);
     return await r.json();
-  } catch (e) {
-    return null;
-  }
+  } catch(e) { return null; }
 }
 
-/* ── Helpers ──────────────────────────────────────────────────────────────── */
-function fmt(n, dec=2) {
-  if (n == null || n === undefined) return '—';
-  return Number(n).toFixed(dec);
-}
-function pct(n, dec=1) {
-  if (n == null) return '—';
-  return (n * 100).toFixed(dec) + '%';
-}
-function el(id) { return document.getElementById(id); }
+const fmt = (n, d=2) => n == null ? '—' : Number(n).toFixed(d);
+const pct = (n, d=1) => n == null ? '—' : (n*100).toFixed(d) + '%';
+const el  = id => document.getElementById(id);
 
-function statBox(label, value, sub, colorClass) {
-  return `<div class="rounded-xl border p-4 ${colorClass || 'bg-gray-50 border-gray-200'}">
-    <p class="text-xs text-gray-500 uppercase tracking-wide">${label}</p>
-    <p class="text-2xl font-bold mt-1">${value}</p>
-    ${sub ? `<p class="text-xs text-gray-400 mt-0.5">${sub}</p>` : ''}
+function statCard(label, value, sub, highlight) {
+  const hl = highlight === true  ? 'green'
+           : highlight === false ? 'red'
+           : '';
+  const valColor = hl === 'green' ? 'text-emerald-400'
+                 : hl === 'red'   ? 'text-red-400'
+                 : 'text-slate-200';
+  return `<div class="stat-card ${hl} p-4">
+    <p class="tag mb-2">${label}</p>
+    <p class="text-xl font-bold ${valColor}">${value}</p>
+    ${sub ? `<p class="text-xs text-slate-700 mt-1">${sub}</p>` : ''}
   </div>`;
 }
 
 function agentCard(s) {
-  const isOk = s.status === 'ok';
-  const dirUp = s.predicted_direction === 'up';
-  const sigPct = isOk ? ((s.signal + 1) / 2 * 100).toFixed(0) : 50;
-  const sigColor = isOk ? (s.signal >= 0 ? '#16a34a' : '#dc2626') : '#9ca3af';
-  const border   = isOk ? (dirUp ? 'border-green-200' : 'border-red-200') : 'border-gray-200';
+  const ok  = s.status === 'ok';
+  const up  = s.predicted_direction === 'up';
+  const pct2= ok ? ((s.signal + 1) / 2 * 100).toFixed(0) : 50;
+  const col = ok ? (s.signal >= 0 ? '#10b981' : '#ef4444') : '#1e293b';
+  const bdr = ok ? (up ? 'up-border' : 'down-border') : '';
   return `
-  <div class="agent-card rounded-xl border ${border} p-4 bg-white">
-    <div class="flex justify-between items-start">
-      <p class="text-xs font-semibold text-gray-700">${s.agent}</p>
-      ${isOk
-        ? `<span class="text-xs font-bold ${dirUp ? 'up' : 'down'}">${s.predicted_direction.toUpperCase()}</span>`
-        : '<span class="text-xs text-gray-400">SKIPPED</span>'}
+  <div class="agent-card ${bdr} p-4">
+    <div class="flex justify-between items-center mb-3">
+      <p class="text-xs font-semibold text-slate-300">${s.agent}</p>
+      ${ok
+        ? `<span class="text-xs font-bold px-2 py-0.5 rounded-full ${up ? 'badge-up' : 'badge-down'}">${s.predicted_direction.toUpperCase()}</span>`
+        : '<span class="text-xs text-slate-600 bg-slate-800/60 px-2 py-0.5 rounded-full">SKIPPED</span>'}
     </div>
-    ${isOk ? `
-    <div class="mt-2 signal-bar-track">
-      <div class="signal-bar-fill" style="width:${sigPct}%;background:${sigColor}"></div>
-    </div>
-    <div class="flex justify-between mt-1 text-xs text-gray-400">
+    ${ok ? `
+    <div class="signal-track mb-1.5"><div class="signal-fill" style="width:${pct2}%;background:${col}"></div></div>
+    <div class="flex justify-between text-xs text-slate-700 mb-2.5">
       <span>signal ${fmt(s.signal,2)}</span><span>conf ${pct(s.confidence,0)}</span>
     </div>
-    <p class="text-xs text-gray-600 mt-2 leading-snug">${s.rationale || ''}</p>
-    ` : `<p class="text-xs text-gray-400 mt-2">${s.error || 'unavailable'}</p>`}
+    <p class="text-xs text-slate-500 leading-snug">${s.rationale || ''}</p>
+    ` : `<p class="text-xs text-slate-700 mt-1">${s.error || 'unavailable'}</p>`}
   </div>`;
 }
 
-/* ── Render ───────────────────────────────────────────────────────────────── */
+function setGlow(id, up) {
+  const c = el(id);
+  c.classList.remove('card-glow-up','card-glow-down');
+  c.classList.add(up ? 'card-glow-up' : 'card-glow-down');
+}
+
 function render(d) {
   if (!d) {
-    el('pred-close').textContent = 'Data unavailable';
-    el('commentary-text').textContent = 'Could not load prediction data. Try refreshing.';
+    el('pred-close').textContent = 'Error loading data';
+    el('commentary-text').textContent = 'Could not load predictions. Try refreshing.';
     return;
   }
 
-  const p = d.latest_prediction || {};
-  const acc = d.rolling_accuracy || {};
-  const bt  = d.backtest_metrics || {};
-  const sigs= d.agent_signals || [];
-  const hist= d.history || [];
+  const p    = d.latest_prediction || {};
+  const acc  = d.rolling_accuracy  || {};
+  const bt   = d.backtest_metrics  || {};
+  const sigs = d.agent_signals     || [];
+  const hist = d.history           || [];
 
-  /* Last updated */
-  el('last-updated').innerHTML =
-    `Last updated<br><strong>${d.last_updated || '—'}</strong>`;
+  el('last-updated').innerHTML = `Updated <span class="text-slate-400 font-medium">${d.last_updated || '—'}</span>`;
 
-  /* SI=F Headline */
-  const dirUp = p.direction === 'up';
+  /* ── SI=F ── */
+  const up = p.direction === 'up';
+  setGlow('sif-card', up);
+
   el('pred-close').textContent = p.predicted_close != null ? '$' + fmt(p.predicted_close) : '—';
+  el('pred-close').className = `price-big ${up ? 'up' : 'down'}`;
+
   const badge = el('pred-dir-badge');
   badge.textContent = (p.direction || '—').toUpperCase();
-  badge.className   = `text-lg font-semibold px-3 py-1 rounded-full ${dirUp ? 'bg-up up' : 'bg-down down'}`;
-  el('ci-text').textContent =
-    (p.ci_lower_80 != null && p.ci_upper_80 != null)
-      ? `80% confidence band: $${fmt(p.ci_lower_80)} – $${fmt(p.ci_upper_80)}`
-      : '80% confidence band: —';
-  el('dir-prob').textContent = p.direction_prob != null ? pct(p.direction_prob, 0) : '—';
-  el('dir-prob').className   = `text-4xl font-bold mt-1 ${dirUp ? 'up' : 'down'}`;
+  badge.className   = `text-xs font-bold px-3 py-1.5 rounded-full ${up ? 'badge-up' : 'badge-down'}`;
+
+  el('ci-text').textContent = p.ci_lower_80 != null
+    ? `80% band: $${fmt(p.ci_lower_80)} – $${fmt(p.ci_upper_80)}`
+    : '80% band: —';
+  el('dir-prob').textContent  = pct(p.direction_prob, 0);
+  el('dir-prob').className    = `text-3xl font-bold ${up ? 'up' : 'down'}`;
   el('one-liner').textContent = p.one_liner || '';
 
-  /* SLV Headline */
-  const slvUp = p.direction === 'up';
-  const slvBadge = el('slv-dir-badge');
-  if (p.slv_predicted_close != null) {
-    el('slv-pred-close').textContent = '$' + fmt(p.slv_predicted_close);
-    slvBadge.textContent = (p.direction || '—').toUpperCase();
-    slvBadge.className   = `text-lg font-semibold px-3 py-1 rounded-full ${slvUp ? 'bg-up up' : 'bg-down down'}`;
-    el('slv-ci-text').textContent =
-      (p.slv_ci_lower_80 != null && p.slv_ci_upper_80 != null)
-        ? `80% confidence band: $${fmt(p.slv_ci_lower_80)} – $${fmt(p.slv_ci_upper_80)}`
-        : '80% confidence band: —';
-    el('slv-dir-prob').textContent = p.direction_prob != null ? pct(p.direction_prob, 0) : '—';
-    el('slv-dir-prob').className   = `text-4xl font-bold mt-1 ${slvUp ? 'up' : 'down'}`;
-  } else {
-    el('slv-pred-close').textContent = '—';
-    slvBadge.textContent = '—';
-    slvBadge.className = 'text-lg font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-400';
-    el('slv-ci-text').textContent = 'SLV data unavailable';
-    el('slv-dir-prob').textContent = '—';
-  }
-
-  /* API health badge */
-  const meta = d.run_metadata || {};
+  const meta   = d.run_metadata || {};
   const health = el('api-health');
   if (p.quant_only_mode) {
     health.textContent = 'Quant-only mode';
-    health.className   = 'mt-3 text-xs px-2 py-1 rounded-full inline-block bg-yellow-100 text-yellow-700';
+    health.className   = 'mt-4 inline-block text-xs px-2.5 py-1 rounded-full bg-amber-900/30 text-amber-500';
   } else {
-    const ok = meta.agents_ok || (sigs.filter(s=>s.status==='ok').length);
-    const sk = meta.agents_skipped || 0;
-    health.textContent = `${ok}/5 agents OK${sk > 0 ? ` (${sk} skipped)` : ''}`;
-    health.className   = `mt-3 text-xs px-2 py-1 rounded-full inline-block ${ok >= 3 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`;
+    const okN = meta.agents_ok || sigs.filter(s=>s.status==='ok').length;
+    const skN = meta.agents_skipped || 0;
+    health.textContent = `${okN}/5 agents OK${skN>0 ? ` · ${skN} skipped` : ''}`;
+    health.className   = `mt-4 inline-block text-xs px-2.5 py-1 rounded-full ${okN>=3 ? 'bg-emerald-900/30 text-emerald-500' : 'bg-amber-900/30 text-amber-500'}`;
   }
 
-  /* Accuracy panel */
-  const dirAccLive  = acc.directional_accuracy != null ? pct(acc.directional_accuracy, 1) : 'No data yet';
-  const dirAccBt    = bt.directional_accuracy  != null ? pct(bt.directional_accuracy,  1) : '—';
-  const maeLive     = acc.MAE   != null ? '$' + fmt(acc.MAE)   : 'No data yet';
-  const ciCovLive   = acc.ci_80_coverage != null ? pct(acc.ci_80_coverage, 1) : 'No data yet';
-  const nLive       = acc.n || 0;
-  const btColor     = bt.beats_baseline_dir ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+  /* ── SLV ── */
+  setGlow('slv-card', up);
+  const slvBadge = el('slv-dir-badge');
+  if (p.slv_predicted_close != null) {
+    el('slv-pred-close').textContent = '$' + fmt(p.slv_predicted_close);
+    el('slv-pred-close').className   = `price-big ${up ? 'up' : 'down'}`;
+    slvBadge.textContent = (p.direction || '—').toUpperCase();
+    slvBadge.className   = `text-xs font-bold px-3 py-1.5 rounded-full ${up ? 'badge-up' : 'badge-down'}`;
+    el('slv-ci-text').textContent = p.slv_ci_lower_80 != null
+      ? `80% band: $${fmt(p.slv_ci_lower_80)} – $${fmt(p.slv_ci_upper_80)}`
+      : '80% band: —';
+    el('slv-dir-prob').textContent = pct(p.direction_prob, 0);
+    el('slv-dir-prob').className   = `text-3xl font-bold ${up ? 'up' : 'down'}`;
+  } else {
+    el('slv-pred-close').textContent = '—';
+    el('slv-pred-close').className   = 'price-big text-slate-600';
+    slvBadge.textContent = '—';
+    slvBadge.className   = 'text-xs font-bold px-3 py-1.5 rounded-full bg-slate-800/60 text-slate-600';
+    el('slv-ci-text').textContent    = 'SLV data unavailable';
+    el('slv-dir-prob').textContent   = '—';
+    el('slv-dir-prob').className     = 'text-3xl font-bold text-slate-600';
+  }
 
+  /* ── Accuracy ── */
   el('accuracy-grid').innerHTML = [
-    statBox('Dir. Accuracy (live)', dirAccLive, nLive ? `last ${nLive} predictions` : 'No live data yet'),
-    statBox('Dir. Accuracy (backtest)', dirAccBt, bt.n_predictions ? `${bt.n_predictions} walk-fwd predictions` : '', btColor),
-    statBox('MAE (live)',              maeLive,   '$/prediction'),
-    statBox('80% CI Coverage (live)',  ciCovLive, 'Target: 80%'),
+    statCard('Dir. Accuracy · Live',
+      acc.directional_accuracy != null ? pct(acc.directional_accuracy,1) : 'No data yet',
+      acc.n ? `${acc.n} predictions` : 'waiting for live data'),
+    statCard('Dir. Accuracy · Backtest',
+      bt.directional_accuracy != null ? pct(bt.directional_accuracy,1) : '—',
+      bt.n_predictions ? `${bt.n_predictions} walk-forward` : '',
+      bt.beats_baseline_dir),
+    statCard('MAE · Live',
+      acc.MAE != null ? '$' + fmt(acc.MAE) : 'No data yet',
+      '$ per prediction'),
+    statCard('80% CI Coverage · Live',
+      acc.ci_80_coverage != null ? pct(acc.ci_80_coverage,1) : 'No data yet',
+      'target: 80%'),
   ].join('');
 
-  const btNote = bt.beats_baseline_dir != null
-    ? `Backtest: model ${bt.beats_baseline_dir ? 'BEATS' : 'DOES NOT BEAT'} naive baseline (${pct(bt.naive_dir_accuracy,0)} naive vs ${pct(bt.directional_accuracy,1)} model) on direction. MAE $${fmt(bt.MAE)} vs naive $${fmt(bt.naive_MAE)}.`
+  el('backtest-note').textContent = bt.beats_baseline_dir != null
+    ? `Backtest (${bt.n_predictions} walk-forward predictions): model ${bt.beats_baseline_dir ? 'BEATS' : 'does NOT beat'} naive baseline — ${pct(bt.naive_dir_accuracy,0)} naive vs ${pct(bt.directional_accuracy,1)} model on direction. MAE $${fmt(bt.MAE)} vs naive $${fmt(bt.naive_MAE)}.`
     : '';
-  el('backtest-note').textContent = btNote;
 
-  /* Agent signals */
+  /* ── Agents ── */
   el('agents-grid').innerHTML = sigs.length
     ? sigs.map(agentCard).join('')
-    : '<p class="text-sm text-gray-400">No agent signals available (quant-only mode).</p>';
+    : '<p class="text-sm text-slate-600 col-span-3">No agent signals — quant-only mode.</p>';
 
-  /* Commentary */
+  /* ── Commentary ── */
   el('commentary-text').textContent = p.commentary || 'No commentary available.';
   const watchItems = (p.watch_list || []).filter(Boolean);
   el('watch-list').innerHTML = watchItems.length
-    ? '<p class="text-xs text-gray-500 font-semibold uppercase tracking-wide mt-2">Watch tomorrow</p>'
-      + watchItems.map(w => `<li class="text-sm text-gray-600 flex gap-2"><span>•</span><span>${w}</span></li>`).join('')
+    ? `<p class="tag mt-4 mb-2">Watch tomorrow</p>`
+      + watchItems.map(w=>`<li class="text-sm text-slate-400 flex gap-2 items-start"><span class="text-slate-700 mt-0.5">›</span><span>${w}</span></li>`).join('')
     : '';
 
-  /* History chart */
-  const chartHist = [...hist].reverse();
-  const labels      = chartHist.map(r => r.target_date || r.prediction_date);
-  const preds       = chartHist.map(r => r.predicted_close);
-  const actuals     = chartHist.map(r => r.actual_close);
-  const slvPreds    = chartHist.map(r => r.slv_predicted_close);
-  const slvActuals  = chartHist.map(r => r.slv_actual_close);
-  const hasSLV      = slvPreds.some(v => v != null);
+  /* ── Chart ── */
+  const chartHist  = [...hist].reverse();
+  const labels     = chartHist.map(r => r.target_date || r.prediction_date);
+  const preds      = chartHist.map(r => r.predicted_close);
+  const actuals    = chartHist.map(r => r.actual_close);
+  const slvPreds   = chartHist.map(r => r.slv_predicted_close);
+  const slvActuals = chartHist.map(r => r.slv_actual_close);
+  const hasSLV     = slvPreds.some(v => v != null);
 
-  const allDatasets = [
-    {
-      type: 'line',
-      label: 'SI=F predicted',
-      data: preds,
-      borderColor: '#3b82f6',
-      backgroundColor: 'rgba(59,130,246,0.05)',
-      borderWidth: 1.5,
-      pointRadius: 0,
-      tension: 0.3,
-      fill: false,
-      yAxisID: 'y',
-    },
-    {
-      type: 'scatter',
-      label: 'SI=F actual',
-      data: actuals.map((v, i) => v != null ? {x: labels[i], y: v} : null).filter(Boolean),
-      backgroundColor: '#f97316',
-      pointRadius: 3,
-      yAxisID: 'y',
-    },
-    {
-      type: 'line',
-      label: 'SLV predicted',
-      data: slvPreds,
-      borderColor: '#8b5cf6',
-      backgroundColor: 'rgba(139,92,246,0.05)',
-      borderWidth: 1.5,
-      pointRadius: 0,
-      tension: 0.3,
-      fill: false,
-      yAxisID: 'y2',
-      hidden: !hasSLV,
-    },
-    {
-      type: 'scatter',
-      label: 'SLV actual',
-      data: slvActuals.map((v, i) => v != null ? {x: labels[i], y: v} : null).filter(Boolean),
-      backgroundColor: '#ec4899',
-      pointRadius: 3,
-      yAxisID: 'y2',
-      hidden: !hasSLV,
-    },
-  ];
+  Chart.defaults.color       = '#374151';
+  Chart.defaults.borderColor = '#111827';
 
-  const ctx = el('history-chart').getContext('2d');
+  const ctx   = el('history-chart').getContext('2d');
   const chart = new Chart(ctx, {
-    data: { labels, datasets: allDatasets },
+    data: {
+      labels,
+      datasets: [
+        { type:'line',    label:'SI=F predicted', data:preds,
+          borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.04)',
+          borderWidth:1.5, pointRadius:0, tension:0.3, fill:false, yAxisID:'y' },
+        { type:'scatter', label:'SI=F actual',
+          data:actuals.map((v,i)=>v!=null?{x:labels[i],y:v}:null).filter(Boolean),
+          backgroundColor:'#f97316', pointRadius:3.5, yAxisID:'y' },
+        { type:'line',    label:'SLV predicted', data:slvPreds,
+          borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.04)',
+          borderWidth:1.5, pointRadius:0, tension:0.3, fill:false, yAxisID:'y2', hidden:!hasSLV },
+        { type:'scatter', label:'SLV actual',
+          data:slvActuals.map((v,i)=>v!=null?{x:labels[i],y:v}:null).filter(Boolean),
+          backgroundColor:'#ec4899', pointRadius:3.5, yAxisID:'y2', hidden:!hasSLV },
+      ],
+    },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
       scales: {
-        x:  { ticks: { maxTicksLimit: 10, font: { size: 10 } } },
-        y:  { position: 'left',  title: { display: true, text: 'SI=F ($)', font: { size: 10 } }, ticks: { font: { size: 10 } } },
-        y2: { position: 'right', title: { display: true, text: 'SLV ($)', font: { size: 10 } }, ticks: { font: { size: 10 } }, grid: { drawOnChartArea: false }, display: hasSLV },
+        x:  { grid:{ color:'rgba(255,255,255,0.03)' }, ticks:{ maxTicksLimit:8, font:{size:10}, color:'#374151' } },
+        y:  { position:'left',  grid:{ color:'rgba(255,255,255,0.03)' },
+              title:{ display:true, text:'SI=F ($)', font:{size:10}, color:'#374151' },
+              ticks:{ font:{size:10}, color:'#374151' } },
+        y2: { position:'right', grid:{ drawOnChartArea:false },
+              title:{ display:hasSLV, text:'SLV ($)', font:{size:10}, color:'#374151' },
+              ticks:{ font:{size:10}, color:'#374151' }, display:hasSLV },
       },
-      plugins: { legend: { labels: { font: { size: 11 } } } },
+      plugins:{ legend:{ labels:{ font:{size:11}, color:'#374151', boxWidth:12, padding:16 } } },
     },
   });
 
   el('toggle-slv').addEventListener('change', function() {
     const show = this.checked;
-    [2, 3].forEach(i => { chart.data.datasets[i].hidden = !show; });
+    [2,3].forEach(i => { chart.data.datasets[i].hidden = !show; });
     chart.options.scales.y2.display = show && hasSLV;
     chart.update();
   });
 }
 
-/* ── Boot ─────────────────────────────────────────────────────────────────── */
 loadData().then(render);
 </script>
 </body>
