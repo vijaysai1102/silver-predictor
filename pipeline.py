@@ -37,7 +37,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-EXPORT_DIR = Path(__file__).parent / "site" / "data"
+EXPORT_DIR = Path(__file__).parent / "docs" / "data"
 
 
 def next_trading_day(from_date: date) -> date:
