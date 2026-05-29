@@ -1,0 +1,14 @@
+{
+  "n_predictions": 556,
+  "directional_accuracy": 0.5216,
+  "MAE": 1.0816,
+  "RMSE": 2.4136,
+  "ci_80_coverage": 0.7104,
+  "naive_dir_accuracy": 0.5,
+  "naive_MAE": 1.0769,
+  "naive_RMSE": 2.3908,
+  "beats_baseline_dir": true,
+  "beats_baseline_mae": false,
+  "oos_residual_std": 0.030885,
+  "ci_half_width_return": 0.032881
+}

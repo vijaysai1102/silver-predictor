@@ -1,0 +1,20 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# IDE / local
+.vscode/
+.idea/
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db

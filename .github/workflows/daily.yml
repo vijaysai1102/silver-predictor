@@ -1,0 +1,58 @@
+name: Daily Silver Price Prediction
+
+on:
+  schedule:
+    # Run Mon–Fri at 23:00 UTC (≈6 pm ET / after US market close)
+    - cron: '0 23 * * 1-5'
+  workflow_dispatch:    # allow manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write       # needed to commit results back to the repo
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # ── 2. Set up Python ─────────────────────────────────────────────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # ── 3. Install dependencies ───────────────────────────────────────────────
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # ── 4. Run pipeline ───────────────────────────────────────────────────────
+      - name: Run daily prediction pipeline
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python pipeline.py
+        # If the full pipeline fails, fall back to quant-only (never crash the job)
+        continue-on-error: false
+
+      - name: Fallback to quant-only if full pipeline failed
+        if: failure()
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python pipeline.py --quant-only
+
+      # ── 5. Commit results ─────────────────────────────────────────────────────
+      - name: Commit predictions and site data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add predictions.db site/data/predictions.json
+          git diff --cached --quiet || git commit -m "chore: daily prediction $(date -u +%Y-%m-%d)"
+          git push
