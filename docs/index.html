@@ -90,6 +90,7 @@
         <div>
           <p class="tag mb-2">Predicted Close</p>
           <span id="pred-close" class="price-big">—</span>
+          <p id="pred-target-date" class="text-slate-500 text-xs font-medium mt-1.5">—</p>
         </div>
         <div class="text-right">
           <p class="tag mb-2">Confidence</p>
@@ -115,6 +116,7 @@
         <div>
           <p class="tag mb-2">Predicted Close</p>
           <span id="slv-pred-close" class="price-big">—</span>
+          <p id="slv-target-date" class="text-slate-500 text-xs font-medium mt-1.5">—</p>
         </div>
         <div class="text-right">
           <p class="tag mb-2">Confidence</p>
@@ -192,6 +194,13 @@ const fmt = (n, d=2) => n == null ? '—' : Number(n).toFixed(d);
 const pct = (n, d=1) => n == null ? '—' : (n*100).toFixed(d) + '%';
 const el  = id => document.getElementById(id);
 
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const [y, m, day] = iso.split('-').map(Number);
+  const d = new Date(y, m - 1, day);
+  return d.toLocaleDateString('en-US', { weekday:'long', month:'short', day:'numeric', year:'numeric' });
+}
+
 function statCard(label, value, sub, highlight) {
   const hl = highlight === true  ? 'green'
            : highlight === false ? 'red'
@@ -262,6 +271,7 @@ function render(d) {
   badge.textContent = (p.direction || '—').toUpperCase();
   badge.className   = `text-xs font-bold px-3 py-1.5 rounded-full ${up ? 'badge-up' : 'badge-down'}`;
 
+  el('pred-target-date').textContent = p.target_date ? fmtDate(p.target_date) : '—';
   el('ci-text').textContent = p.ci_lower_80 != null
     ? `80% band: $${fmt(p.ci_lower_80)} – $${fmt(p.ci_upper_80)}`
     : '80% band: —';
@@ -289,12 +299,14 @@ function render(d) {
     el('slv-pred-close').className   = `price-big ${up ? 'up' : 'down'}`;
     slvBadge.textContent = (p.direction || '—').toUpperCase();
     slvBadge.className   = `text-xs font-bold px-3 py-1.5 rounded-full ${up ? 'badge-up' : 'badge-down'}`;
+    el('slv-target-date').textContent = p.target_date ? fmtDate(p.target_date) : '—';
     el('slv-ci-text').textContent = p.slv_ci_lower_80 != null
       ? `80% band: $${fmt(p.slv_ci_lower_80)} – $${fmt(p.slv_ci_upper_80)}`
       : '80% band: —';
     el('slv-dir-prob').textContent = pct(p.direction_prob, 0);
     el('slv-dir-prob').className   = `text-3xl font-bold ${up ? 'up' : 'down'}`;
   } else {
+    el('slv-target-date').textContent = '—';
     el('slv-pred-close').textContent = '—';
     el('slv-pred-close').className   = 'price-big text-slate-600';
     slvBadge.textContent = '—';
