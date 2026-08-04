@@ -1,11 +1,11 @@
 {
   "latest_prediction": {
-    "predicted_close": 57.41,
-    "ci_lower_80": 56.0123,
-    "ci_upper_80": 59.8117,
+    "predicted_close": 58.2314,
+    "ci_lower_80": 56.7373,
+    "ci_upper_80": 60.5768,
     "direction": "down",
-    "direction_prob": 0.51,
-    "reasoning": "The quant model's estimate is adjusted downward due to the overall bearish sentiment from the specialist agents, particularly the strong signals from the DollarRatesAgent and PreciousMetalsAgent. The IndustrialDemandAgent's bullish signal is countered by the bearish signals from other agents, resulting in a slight downward adjustment. The predicted close remains within the required 5% range of the quant model's estimate.",
+    "direction_prob": 0.58,
+    "reasoning": "The quant model's estimate is adjusted downward due to the overall bearish sentiment from the specialist agents, particularly the strong signals from the DollarRatesAgent and TechnicalAgent. The IndustrialDemandAgent's bullish signal is outweighed by the other agents' bearish views, leading to a slight decrease in the predicted close price. The predicted close remains within the required 5% range of the quant model's estimate.",
     "agents_used": [
       "PreciousMetalsAgent",
       "DollarRatesAgent",
@@ -14,21 +14,21 @@
       "TechnicalAgent"
     ],
     "agents_skipped": [],
-    "quant_anchor": 57.912,
+    "quant_anchor": 58.657,
     "llm_adjusted": true,
-    "weighted_signal": -0.393,
+    "weighted_signal": -0.514,
     "quant_only_mode": false,
-    "prediction_date": "2026-07-31",
-    "target_date": "2026-08-03",
-    "slv_predicted_close": 51.9512,
-    "slv_ci_lower_80": 50.2296,
-    "slv_ci_upper_80": 53.6729,
-    "commentary": "Silver is expected to decrease slightly to $57.41, with a 51% probability of a downward move. This prediction is based on a combination of signals from various agents, including a strong bearish signal from the DollarRatesAgent and a bearish signal from the PreciousMetalsAgent. However, it's essential to remember that silver is volatile, and predictions can be wrong.",
-    "one_liner": "Silver predicted to drop to $57.41",
+    "prediction_date": "2026-08-03",
+    "target_date": "2026-08-04",
+    "slv_predicted_close": 52.301,
+    "slv_ci_lower_80": 50.5761,
+    "slv_ci_upper_80": 54.026,
+    "commentary": "Silver is expected to decrease slightly to $58.23, with a 58% probability of moving downward. This prediction is based on a combination of signals from various agents, with bearish views from the DollarRatesAgent and TechnicalAgent outweighing the bullish signal from the IndustrialDemandAgent. Silver is known to be volatile, and predictions can be wrong.",
+    "one_liner": "Silver predicted to drop to $58.23",
     "watch_list": [
       "Dollar strength",
-      "Gold/silver ratio",
-      "Industrial demand trends"
+      "Industrial demand trends",
+      "Technical indicators"
     ]
   },
   "agent_signals": [
@@ -36,11 +36,11 @@
       "signal": -0.7,
       "confidence": 0.6,
       "predicted_direction": "down",
-      "rationale": "Silver's recent underperformance vs 50-day MA and increasing gold/silver ratio suggest a bearish signal for the next trading day.",
+      "rationale": "Silver's recent underperformance against its 50-day MA and the slight decline in gold's 5-day return suggest a bearish signal for silver's next trading day close.",
       "key_numbers": {
-        "Gold/Silver ratio": 69.7,
-        "Silver vs 50-day MA": -8.99,
-        "Gold 5-day return": 1.32
+        "Gold/Silver ratio": 70.3,
+        "Silver vs 50-day MA": -10.4,
+        "Gold 5-day return": -0.45
       },
       "status": "ok",
       "agent": "PreciousMetalsAgent"
@@ -51,9 +51,9 @@
       "predicted_direction": "down",
       "rationale": "Strong dollar and high real rates are bearish for silver.",
       "key_numbers": {
-        "DXY 5-day return": -1.4,
-        "Real 10yr yield": 2.41,
-        "DXY vs 20-day MA": -0.98
+        "DXY close": 100.01,
+        "DXY 5-day return": -1.65,
+        "Real 10yr yield (TIPS)": 2.47
       },
       "status": "ok",
       "agent": "DollarRatesAgent"
@@ -64,46 +64,46 @@
       "predicted_direction": "up",
       "rationale": "Strong copper and equities suggest higher industrial activity, likely benefiting silver.",
       "key_numbers": {
-        "Copper 5-day return": 2.21,
-        "Copper/Silver ratio": 0.11,
-        "S&P 500 5-day return": 0.4
+        "Copper 5-day return": 1.84,
+        "Copper vs 20-day MA": 2.22,
+        "S&P 500 5-day return": 1.05
       },
       "status": "ok",
       "agent": "IndustrialDemandAgent"
     },
     {
-      "signal": -0.35,
-      "confidence": 0.62,
+      "signal": -0.8,
+      "confidence": 0.7,
       "predicted_direction": "up",
-      "rationale": "Mixed signals from inflation expectations and risk-off sentiment, but slight risk-off tone and lower 10yr Breakeven Inflation support a bullish signal for silver.",
+      "rationale": "Higher inflation expectations and positive S&P 500 returns are generally bullish for silver, but the 10yr Breakeven Inflation is still relatively low.",
       "key_numbers": {
-        "10yr Breakeven Inflation": -0.01,
-        "S&P 500 5-day return": 0.4,
-        "Silver 21-day realized vol": 2.42
+        "10yr Breakeven Inflation": 2.28,
+        "S&P 500 5-day return": 1.05,
+        "Silver 21-day realized vol": 2.45
       },
       "status": "ok",
       "agent": "MacroSentimentAgent"
     },
     {
-      "signal": -0.5,
-      "confidence": 0.6,
+      "signal": -0.7,
+      "confidence": 0.8,
       "predicted_direction": "down",
-      "rationale": "Silver is overbought and showing mean-reversion potential against the 50-day and 200-day MAs.",
+      "rationale": "Silver is oversold but still below key MAs, with a strong bearish momentum.",
       "key_numbers": {
-        "RSI": 46.9,
-        "50-day MA": -8.99,
-        "200-day MA": -15.81
+        "RSI": 49.9,
+        "10-day return": -2.08,
+        "vs 200-day MA": -17.61
       },
       "status": "ok",
       "agent": "TechnicalAgent"
     }
   ],
   "rolling_accuracy": {
-    "n": 36,
-    "directional_accuracy": 0.5,
-    "MAE": 1.5705,
-    "RMSE": 2.0674,
-    "ci_80_coverage": 0.6944
+    "n": 37,
+    "directional_accuracy": 0.4865,
+    "MAE": 1.5544,
+    "RMSE": 2.0455,
+    "ci_80_coverage": 0.7027
   },
   "backtest_metrics": {
     "n_predictions": 556,
@@ -121,6 +121,21 @@
   },
   "history": [
     {
+      "prediction_date": "2026-08-03",
+      "target_date": "2026-08-04",
+      "predicted_close": 58.2314,
+      "ci_lower_80": 56.7373,
+      "ci_upper_80": 60.5768,
+      "direction": "down",
+      "direction_prob": 0.58,
+      "quant_only_mode": 0,
+      "actual_close": null,
+      "slv_predicted_close": 52.301,
+      "slv_ci_lower_80": 50.5761,
+      "slv_ci_upper_80": 54.026,
+      "slv_actual_close": null
+    },
+    {
       "prediction_date": "2026-07-31",
       "target_date": "2026-08-03",
       "predicted_close": 57.41,
@@ -129,11 +144,11 @@
       "direction": "down",
       "direction_prob": 0.51,
       "quant_only_mode": 0,
-      "actual_close": null,
+      "actual_close": 58.3849983215332,
       "slv_predicted_close": 51.9512,
       "slv_ci_lower_80": 50.2296,
       "slv_ci_upper_80": 53.6729,
-      "slv_actual_close": null
+      "slv_actual_close": 52.459999084472656
     },
     {
       "prediction_date": "2026-07-30",
@@ -781,13 +796,13 @@
       "slv_actual_close": 68.36000061035156
     }
   ],
-  "last_updated": "2026-07-31",
+  "last_updated": "2026-08-03",
   "run_metadata": {
     "quant_only": false,
     "agents_ok": 5,
     "agents_skipped": 0,
-    "silver_close": 57.775001525878906,
-    "slv_close": 52.36000061035156,
-    "elapsed_s": 189.0
+    "silver_close": 58.3849983215332,
+    "slv_close": 52.459999084472656,
+    "elapsed_s": 188.8
   }
 }
