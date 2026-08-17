@@ -1,109 +1,61 @@
 {
   "latest_prediction": {
-    "predicted_close": 64.93,
-    "ci_lower_80": 63.3839,
-    "ci_upper_80": 67.6469,
-    "direction": "down",
-    "direction_prob": 0.58,
-    "reasoning": "The quant model predicts a slight increase, but the weighted average signal from specialist agents is bearish, driven by strong dollar and high real rates, as well as overbought conditions and bearish divergence against moving averages. The predicted close is adjusted downward from the quant model estimate, while remaining within the 5% bound. The direction probability is also adjusted to reflect the bearish signals from the agents.",
-    "agents_used": [
-      "PreciousMetalsAgent",
-      "DollarRatesAgent",
-      "IndustrialDemandAgent",
-      "MacroSentimentAgent",
-      "TechnicalAgent"
+    "predicted_close": 65.989,
+    "ci_lower_80": 63.8246,
+    "ci_upper_80": 68.1534,
+    "direction": "up",
+    "direction_prob": 0.5321,
+    "reasoning": "Quant-only mode: LLM orchestrator unavailable.",
+    "agents_used": [],
+    "agents_skipped": [
+      "all"
     ],
-    "agents_skipped": [],
-    "quant_anchor": 65.5154,
-    "llm_adjusted": true,
-    "weighted_signal": -0.412,
-    "quant_only_mode": false,
-    "prediction_date": "2026-08-14",
-    "target_date": "2026-08-17",
-    "slv_predicted_close": 58.4302,
-    "slv_ci_lower_80": 56.5074,
-    "slv_ci_upper_80": 60.3531,
-    "commentary": "Silver is expected to decrease slightly to $64.93, despite a quant model prediction of a slight increase. The overall bearish signal from specialist agents, driven by a strong dollar and high real rates, is the main reason for this prediction. Silver's volatility means this prediction could be wrong. ",
-    "one_liner": "Silver predicted to drop to $64.93",
-    "watch_list": [
-      "Dollar strength",
-      "Real interest rates",
-      "Industrial demand trends"
-    ]
+    "quant_anchor": 65.989,
+    "llm_adjusted": false,
+    "weighted_signal": 0.0,
+    "quant_only_mode": true,
+    "prediction_date": "2026-08-17",
+    "target_date": "2026-08-18",
+    "slv_predicted_close": 59.6975,
+    "slv_ci_lower_80": 57.7387,
+    "slv_ci_upper_80": 61.6562,
+    "commentary": "Daily commentary unavailable.",
+    "one_liner": "Silver predicted up to $65.99.",
+    "watch_list": []
   },
   "agent_signals": [
     {
-      "signal": -0.43,
-      "confidence": 0.62,
-      "predicted_direction": "down",
-      "rationale": "Silver's recent price drop and lower-than-average gold/silver ratio suggest a bearish trend for the next trading day.",
-      "key_numbers": {
-        "Gold/Silver ratio": 67.3,
-        "Silver vs 50-day MA": 4.69,
-        "Gold 5-day return": 2.87
-      },
-      "status": "ok",
-      "agent": "PreciousMetalsAgent"
+      "status": "skipped",
+      "agent": "PreciousMetalsAgent",
+      "error": "Error code: 404 - {'error': {'message': 'The model `llama-3.1-8b-instant` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}"
     },
     {
-      "signal": -1.0,
-      "confidence": 0.8,
-      "predicted_direction": "down",
-      "rationale": "Strong dollar and high real rates are bearish for silver.",
-      "key_numbers": {
-        "DXY close": 99.64,
-        "Real 10yr yield (TIPS)": 2.39,
-        "DXY 5-day return": -0.01
-      },
-      "status": "ok",
-      "agent": "DollarRatesAgent"
+      "status": "skipped",
+      "agent": "DollarRatesAgent",
+      "error": "Error code: 404 - {'error': {'message': 'The model `llama-3.1-8b-instant` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}"
     },
     {
-      "signal": 0.8,
-      "confidence": 0.7,
-      "predicted_direction": "up",
-      "rationale": "Strong copper and equities suggest higher industrial activity, likely supporting silver prices.",
-      "key_numbers": {
-        "Copper 5-day return": -1.41,
-        "S&P 500 5-day return": 1.15,
-        "Copper/Silver ratio": 0.1
-      },
-      "status": "ok",
-      "agent": "IndustrialDemandAgent"
+      "status": "skipped",
+      "agent": "IndustrialDemandAgent",
+      "error": "Error code: 404 - {'error': {'message': 'The model `llama-3.1-8b-instant` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}"
     },
     {
-      "signal": -0.45,
-      "confidence": 0.62,
-      "predicted_direction": "up",
-      "rationale": "Mixed signals from inflation expectations and risk-off sentiment, but slight risk-off sentiment and lower 10yr Breakeven Inflation suggest a bullish signal for silver.",
-      "key_numbers": {
-        "10yr Breakeven Inflation": -0.02,
-        "S&P 500 5-day return": 1.15,
-        "Silver 21-day realized vol": 2.16
-      },
-      "status": "ok",
-      "agent": "MacroSentimentAgent"
+      "status": "skipped",
+      "agent": "MacroSentimentAgent",
+      "error": "Error code: 404 - {'error': {'message': 'The model `llama-3.1-8b-instant` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}"
     },
     {
-      "signal": -0.8,
-      "confidence": 0.7,
-      "predicted_direction": "down",
-      "rationale": "Silver is overbought and showing bearish divergence against its MAs.",
-      "key_numbers": {
-        "RSI": 71.1,
-        "10-day return": 10.3,
-        "vs 200-day MA": -7.96
-      },
-      "status": "ok",
-      "agent": "TechnicalAgent"
+      "status": "skipped",
+      "agent": "TechnicalAgent",
+      "error": "Error code: 404 - {'error': {'message': 'The model `llama-3.1-8b-instant` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}"
     }
   ],
   "rolling_accuracy": {
-    "n": 44,
-    "directional_accuracy": 0.4545,
-    "MAE": 1.5131,
-    "RMSE": 1.9709,
-    "ci_80_coverage": 0.7273
+    "n": 45,
+    "directional_accuracy": 0.4444,
+    "MAE": 1.4994,
+    "RMSE": 1.9534,
+    "ci_80_coverage": 0.7333
   },
   "backtest_metrics": {
     "n_predictions": 556,
@@ -121,6 +73,21 @@
   },
   "history": [
     {
+      "prediction_date": "2026-08-17",
+      "target_date": "2026-08-18",
+      "predicted_close": 65.989,
+      "ci_lower_80": 63.8246,
+      "ci_upper_80": 68.1534,
+      "direction": "up",
+      "direction_prob": 0.5321,
+      "quant_only_mode": 1,
+      "actual_close": null,
+      "slv_predicted_close": 59.6975,
+      "slv_ci_lower_80": 57.7387,
+      "slv_ci_upper_80": 61.6562,
+      "slv_actual_close": null
+    },
+    {
       "prediction_date": "2026-08-14",
       "target_date": "2026-08-17",
       "predicted_close": 64.93,
@@ -129,11 +96,11 @@
       "direction": "down",
       "direction_prob": 0.58,
       "quant_only_mode": 0,
-      "actual_close": null,
+      "actual_close": 65.82499694824219,
       "slv_predicted_close": 58.4302,
       "slv_ci_lower_80": 56.5074,
       "slv_ci_upper_80": 60.3531,
-      "slv_actual_close": null
+      "slv_actual_close": 59.56999969482422
     },
     {
       "prediction_date": "2026-08-13",
@@ -916,13 +883,13 @@
       "slv_actual_close": 68.36000061035156
     }
   ],
-  "last_updated": "2026-08-14",
+  "last_updated": "2026-08-17",
   "run_metadata": {
     "quant_only": false,
-    "agents_ok": 5,
-    "agents_skipped": 0,
-    "silver_close": 64.82499694824219,
-    "slv_close": 58.47999954223633,
-    "elapsed_s": 191.0
+    "agents_ok": 0,
+    "agents_skipped": 5,
+    "silver_close": 65.82499694824219,
+    "slv_close": 59.56999969482422,
+    "elapsed_s": 839.0
   }
 }
