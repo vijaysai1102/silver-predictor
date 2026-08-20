@@ -1,26 +1,26 @@
 {
   "latest_prediction": {
-    "predicted_close": 67.6814,
-    "ci_lower_80": 65.4762,
-    "ci_upper_80": 69.8866,
+    "predicted_close": 68.6876,
+    "ci_lower_80": 66.4384,
+    "ci_upper_80": 70.9369,
     "direction": "up",
-    "direction_prob": 0.617,
+    "direction_prob": 0.5532,
     "reasoning": "Quant-only mode: LLM orchestrator unavailable.",
     "agents_used": [],
     "agents_skipped": [
       "all"
     ],
-    "quant_anchor": 67.6814,
+    "quant_anchor": 68.6876,
     "llm_adjusted": false,
     "weighted_signal": 0.0,
     "quant_only_mode": true,
-    "prediction_date": "2026-08-19",
-    "target_date": "2026-08-20",
-    "slv_predicted_close": 60.5533,
-    "slv_ci_lower_80": 58.5801,
-    "slv_ci_upper_80": 62.5265,
+    "prediction_date": "2026-08-20",
+    "target_date": "2026-08-21",
+    "slv_predicted_close": 61.7692,
+    "slv_ci_lower_80": 59.7417,
+    "slv_ci_upper_80": 63.7966,
     "commentary": "Daily commentary unavailable.",
-    "one_liner": "Silver predicted up to $67.68.",
+    "one_liner": "Silver predicted up to $68.69.",
     "watch_list": []
   },
   "agent_signals": [
@@ -51,11 +51,11 @@
     }
   ],
   "rolling_accuracy": {
-    "n": 47,
-    "directional_accuracy": 0.4255,
-    "MAE": 1.577,
-    "RMSE": 2.035,
-    "ci_80_coverage": 0.7021
+    "n": 48,
+    "directional_accuracy": 0.4375,
+    "MAE": 1.5592,
+    "RMSE": 2.0164,
+    "ci_80_coverage": 0.7083
   },
   "backtest_metrics": {
     "n_predictions": 556,
@@ -73,6 +73,21 @@
   },
   "history": [
     {
+      "prediction_date": "2026-08-20",
+      "target_date": "2026-08-21",
+      "predicted_close": 68.6876,
+      "ci_lower_80": 66.4384,
+      "ci_upper_80": 70.9369,
+      "direction": "up",
+      "direction_prob": 0.5532,
+      "quant_only_mode": 1,
+      "actual_close": null,
+      "slv_predicted_close": 61.7692,
+      "slv_ci_lower_80": 59.7417,
+      "slv_ci_upper_80": 63.7966,
+      "slv_actual_close": null
+    },
+    {
       "prediction_date": "2026-08-19",
       "target_date": "2026-08-20",
       "predicted_close": 67.6814,
@@ -81,11 +96,11 @@
       "direction": "up",
       "direction_prob": 0.617,
       "quant_only_mode": 1,
-      "actual_close": null,
+      "actual_close": 68.40499877929688,
       "slv_predicted_close": 60.5533,
       "slv_ci_lower_80": 58.5801,
       "slv_ci_upper_80": 62.5265,
-      "slv_actual_close": null
+      "slv_actual_close": 61.65999984741211
     },
     {
       "prediction_date": "2026-08-18",
@@ -913,13 +928,13 @@
       "slv_actual_close": 68.36000061035156
     }
   ],
-  "last_updated": "2026-08-19",
+  "last_updated": "2026-08-20",
   "run_metadata": {
     "quant_only": false,
     "agents_ok": 0,
     "agents_skipped": 5,
-    "silver_close": 67.06500244140625,
-    "slv_close": 60.0099983215332,
-    "elapsed_s": 838.1
+    "silver_close": 68.40499877929688,
+    "slv_close": 61.65999984741211,
+    "elapsed_s": 839.3
   }
 }
