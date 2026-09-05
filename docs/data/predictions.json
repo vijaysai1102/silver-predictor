@@ -1,26 +1,26 @@
 {
   "latest_prediction": {
-    "predicted_close": 67.7152,
-    "ci_lower_80": 65.4951,
-    "ci_upper_80": 69.9353,
+    "predicted_close": 67.0398,
+    "ci_lower_80": 64.8427,
+    "ci_upper_80": 69.2369,
     "direction": "up",
-    "direction_prob": 0.5373,
+    "direction_prob": 0.5424,
     "reasoning": "Quant-only mode: LLM orchestrator unavailable.",
     "agents_used": [],
     "agents_skipped": [
       "all"
     ],
-    "quant_anchor": 67.7152,
+    "quant_anchor": 67.0398,
     "llm_adjusted": false,
     "weighted_signal": 0.0,
     "quant_only_mode": true,
-    "prediction_date": "2026-09-04",
+    "prediction_date": "2026-09-05",
     "target_date": "2026-09-07",
-    "slv_predicted_close": 59.3842,
-    "slv_ci_lower_80": 57.4419,
-    "slv_ci_upper_80": 61.3265,
+    "slv_predicted_close": 60.8102,
+    "slv_ci_lower_80": 58.8193,
+    "slv_ci_upper_80": 62.8011,
     "commentary": "Daily commentary unavailable.",
-    "one_liner": "Silver predicted up to $67.72.",
+    "one_liner": "Silver predicted up to $67.04.",
     "watch_list": []
   },
   "agent_signals": [
@@ -72,6 +72,21 @@
     "ci_half_width_return": 0.032881
   },
   "history": [
+    {
+      "prediction_date": "2026-09-05",
+      "target_date": "2026-09-07",
+      "predicted_close": 67.0398,
+      "ci_lower_80": 64.8427,
+      "ci_upper_80": 69.2369,
+      "direction": "up",
+      "direction_prob": 0.5424,
+      "quant_only_mode": 1,
+      "actual_close": null,
+      "slv_predicted_close": 60.8102,
+      "slv_ci_lower_80": 58.8193,
+      "slv_ci_upper_80": 62.8011,
+      "slv_actual_close": null
+    },
     {
       "prediction_date": "2026-09-04",
       "target_date": "2026-09-07",
@@ -1078,13 +1093,13 @@
       "slv_actual_close": 68.36000061035156
     }
   ],
-  "last_updated": "2026-09-04",
+  "last_updated": "2026-09-05",
   "run_metadata": {
     "quant_only": false,
     "agents_ok": 0,
     "agents_skipped": 5,
-    "silver_close": 67.5199966430664,
-    "slv_close": 59.06999969482422,
-    "elapsed_s": 843.5
+    "silver_close": 66.81999969482422,
+    "slv_close": 60.54999923706055,
+    "elapsed_s": 839.0
   }
 }
