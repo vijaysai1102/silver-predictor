@@ -1,26 +1,26 @@
 {
   "latest_prediction": {
-    "predicted_close": 60.4821,
-    "ci_lower_80": 58.4859,
-    "ci_upper_80": 62.4783,
-    "direction": "down",
-    "direction_prob": 0.4516,
+    "predicted_close": 61.2499,
+    "ci_lower_80": 59.2442,
+    "ci_upper_80": 63.2557,
+    "direction": "up",
+    "direction_prob": 0.5528,
     "reasoning": "Quant-only mode: LLM orchestrator unavailable.",
     "agents_used": [],
     "agents_skipped": [
       "all"
     ],
-    "quant_anchor": 60.4821,
+    "quant_anchor": 61.2499,
     "llm_adjusted": false,
     "weighted_signal": 0.0,
     "quant_only_mode": true,
-    "prediction_date": "2026-10-03",
-    "target_date": "2026-10-05",
-    "slv_predicted_close": 54.8829,
-    "slv_ci_lower_80": 53.0737,
-    "slv_ci_upper_80": 56.6921,
+    "prediction_date": "2026-10-06",
+    "target_date": "2026-10-07",
+    "slv_predicted_close": 55.26,
+    "slv_ci_lower_80": 53.4472,
+    "slv_ci_upper_80": 57.0727,
     "commentary": "Daily commentary unavailable.",
-    "one_liner": "Silver predicted down to $60.48.",
+    "one_liner": "Silver predicted up to $61.25.",
     "watch_list": []
   },
   "agent_signals": [
@@ -72,6 +72,21 @@
     "ci_half_width_return": 0.032881
   },
   "history": [
+    {
+      "prediction_date": "2026-10-06",
+      "target_date": "2026-10-07",
+      "predicted_close": 61.2499,
+      "ci_lower_80": 59.2442,
+      "ci_upper_80": 63.2557,
+      "direction": "up",
+      "direction_prob": 0.5528,
+      "quant_only_mode": 1,
+      "actual_close": null,
+      "slv_predicted_close": 55.26,
+      "slv_ci_lower_80": 53.4472,
+      "slv_ci_upper_80": 57.0727,
+      "slv_actual_close": null
+    },
     {
       "prediction_date": "2026-10-03",
       "target_date": "2026-10-05",
@@ -1393,13 +1408,13 @@
       "slv_actual_close": 68.36000061035156
     }
   ],
-  "last_updated": "2026-10-03",
+  "last_updated": "2026-10-06",
   "run_metadata": {
     "quant_only": false,
     "agents_ok": 0,
     "agents_skipped": 5,
-    "silver_close": 60.709999084472656,
-    "slv_close": 55.02000045776367,
-    "elapsed_s": 839.8
+    "silver_close": 61.0,
+    "slv_close": 55.130001068115234,
+    "elapsed_s": 838.8
   }
 }
