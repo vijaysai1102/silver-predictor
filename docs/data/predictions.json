@@ -1,26 +1,26 @@
 {
   "latest_prediction": {
-    "predicted_close": 45.9855,
-    "ci_lower_80": 44.4727,
-    "ci_upper_80": 47.4984,
+    "predicted_close": 44.4405,
+    "ci_lower_80": 42.9686,
+    "ci_upper_80": 45.9124,
     "direction": "down",
-    "direction_prob": 0.4931,
+    "direction_prob": 0.4072,
     "reasoning": "Quant-only mode: LLM orchestrator unavailable.",
     "agents_used": [],
     "agents_skipped": [
       "all"
     ],
-    "quant_anchor": 45.9855,
+    "quant_anchor": 44.4405,
     "llm_adjusted": false,
     "weighted_signal": 0.0,
     "quant_only_mode": true,
-    "prediction_date": "2026-11-18",
-    "target_date": "2026-11-19",
-    "slv_predicted_close": 42.6186,
-    "slv_ci_lower_80": 41.2165,
-    "slv_ci_upper_80": 44.0207,
+    "prediction_date": "2026-11-19",
+    "target_date": "2026-11-20",
+    "slv_predicted_close": 40.5191,
+    "slv_ci_lower_80": 39.1808,
+    "slv_ci_upper_80": 41.8574,
     "commentary": "Daily commentary unavailable.",
-    "one_liner": "Silver predicted down to $45.99.",
+    "one_liner": "Silver predicted down to $44.44.",
     "watch_list": []
   },
   "agent_signals": [
@@ -51,11 +51,11 @@
     }
   ],
   "rolling_accuracy": {
-    "n": 86,
-    "directional_accuracy": 0.407,
-    "MAE": 1.4443,
-    "RMSE": 1.886,
-    "ci_80_coverage": 0.7326
+    "n": 87,
+    "directional_accuracy": 0.4138,
+    "MAE": 1.4417,
+    "RMSE": 1.8797,
+    "ci_80_coverage": 0.7356
   },
   "backtest_metrics": {
     "n_predictions": 556,
@@ -73,6 +73,21 @@
   },
   "history": [
     {
+      "prediction_date": "2026-11-19",
+      "target_date": "2026-11-20",
+      "predicted_close": 44.4405,
+      "ci_lower_80": 42.9686,
+      "ci_upper_80": 45.9124,
+      "direction": "down",
+      "direction_prob": 0.4072,
+      "quant_only_mode": 1,
+      "actual_close": null,
+      "slv_predicted_close": 40.5191,
+      "slv_ci_lower_80": 39.1808,
+      "slv_ci_upper_80": 41.8574,
+      "slv_actual_close": null
+    },
+    {
       "prediction_date": "2026-11-18",
       "target_date": "2026-11-19",
       "predicted_close": 45.9855,
@@ -81,11 +96,11 @@
       "direction": "down",
       "direction_prob": 0.4931,
       "quant_only_mode": 1,
-      "actual_close": null,
+      "actual_close": 44.76499938964844,
       "slv_predicted_close": 42.6186,
       "slv_ci_lower_80": 41.2165,
       "slv_ci_upper_80": 44.0207,
-      "slv_actual_close": null
+      "slv_actual_close": 40.70000076293945
     },
     {
       "prediction_date": "2026-11-17",
@@ -1406,30 +1421,15 @@
       "slv_ci_lower_80": 49.956,
       "slv_ci_upper_80": 53.3895,
       "slv_actual_close": 50.38999938964844
-    },
-    {
-      "prediction_date": "2026-07-14",
-      "target_date": "2026-07-15",
-      "predicted_close": 58.62,
-      "ci_lower_80": 57.1729,
-      "ci_upper_80": 61.0601,
-      "direction": "down",
-      "direction_prob": 0.57,
-      "quant_only_mode": 0,
-      "actual_close": 58.13999938964844,
-      "slv_predicted_close": 53.0149,
-      "slv_ci_lower_80": 51.2666,
-      "slv_ci_upper_80": 54.7632,
-      "slv_actual_close": 52.209999084472656
     }
   ],
-  "last_updated": "2026-11-18",
+  "last_updated": "2026-11-19",
   "run_metadata": {
     "quant_only": false,
     "agents_ok": 0,
     "agents_skipped": 5,
-    "silver_close": 46.0099983215332,
-    "slv_close": 42.63999938964844,
-    "elapsed_s": 837.2
+    "silver_close": 44.76499938964844,
+    "slv_close": 40.70000076293945,
+    "elapsed_s": 838.9
   }
 }
